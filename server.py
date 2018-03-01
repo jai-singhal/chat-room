@@ -9,7 +9,7 @@ import requests
 class Server:
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     host =  "192.168.1.102"
-    port = 8022
+    port = 8037
 
     def __init__(self):
         print(self.host)
@@ -49,21 +49,21 @@ class Server:
             try:
                 message = conn.recv(4096)
                 if message:
-                    message_to_send = "<" + addr[0] + "> " + message.decode("utf-8")
-                    print(message_to_send)
-                    self.broadcast(message_to_send, conn)
+                    print_msg = "<" + addr[0] + "> " + message.decode("utf-8")
+                    print(print_msg)
+                    self.broadcast(message, conn)
 
             except socket.error as e:
                 print("exception in message", e)
 
 
     def broadcast(self, message, connection):
-        for client in self.client_list:
+        for client in self.client_list:          
             if client!=connection:
                 try:
-                    client.send(str.encode(message))
-                except:
-                     print("CLient closed with exception", e)
+                    client.send(message)
+                except socket.error as e:
+                     print("Client closed with exception: {}".format(e))
                      client.close()    
                      self.removeClient(client)
 

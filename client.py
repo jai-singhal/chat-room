@@ -6,12 +6,14 @@ import select
 class Client:
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     host = "192.168.1.102"
-    port = 8025
+    port = 8037
 
     def __init__(self):
         self.client_list = []
         self.getHostAndPort()
         self.connectServer()
+        # print("Enter username: ")
+        # self.username = 
 
 
     @classmethod
@@ -41,6 +43,7 @@ class Client:
             for socks in read_sockets:
                 if socks == self.server:
                     message = socks.recv(4096)
+                    print("<{}>: {}".format(self.host, message.decode("utf-8")))
                 else:
                     message = sys.stdin.readline()
                     self.server.send(str.encode(message))
